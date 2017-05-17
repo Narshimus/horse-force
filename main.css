@@ -1,0 +1,42 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 60px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+figure{
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+}
+
+.fig-left{
+  background-position: right 100%;
+  background-size: auto 100%;
+}
+
+.fig-right{
+  background-position: left 100%;
+  background-size: auto 100%;
+}
+
+.left-img,.right-img{
+  height: 500px;
+}
+
+figure p{
+  text-align: center;
+}
