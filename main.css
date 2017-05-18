@@ -1,6 +1,7 @@
 body {
   padding-top: 50px;
   padding-bottom: 60px;
+  max-width: 100%;
 }
 
 html {
@@ -39,4 +40,13 @@ figure{
 
 figure p{
   text-align: center;
+}
+
+.main{
+  height: 100%
+}
+
+.icon{
+  height: 50px;
+  width: 50px;
 }
