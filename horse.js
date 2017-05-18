@@ -2,6 +2,7 @@ $(document).ready(function() {
 
   //get name arrays
   let trueNames, falseNames, correct;
+  let score = 0;
   $.getJSON('truenames.json', function(data) {
     trueNames = data;
   })
@@ -9,25 +10,31 @@ $(document).ready(function() {
     falseNames = data;
   })
 
-  $.getJSON("https://api.flickr.com/services/feeds/groups_pool.gne?jsoncallback=?", {
-      id: '289685@N25',
-      format: "json",
-    },
-    function(data) {
-      var rnd = Math.floor(Math.random() * data.items.length);
-      var image_src = data.items[rnd]['media']['m'].replace("_m", "_b");
-      // $('body').css('background-image', "url('" + image_src + "')");
-
-    });
+  // $.getJSON("https://api.flickr.com/services/feeds/groups_pool.gne?jsoncallback=?", {
+  //     id: '289685@N25',
+  //     format: "json",
+  //   },
+  //   function(data) {
+  //     var rnd = Math.floor(Math.random() * data.items.length);
+  //     var image_src = data.items[rnd]['media']['m'].replace("_m", "_b");
+  //     $('body').css('background-image', "url('" + image_src + "')");
+  //
+  //   });
 
   $('#start').click(function() {
 
     $('.jumbotron').addClass('animated fadeOutUp');
     $('.fig-right').addClass('animated fadeOutRight');
     $('.fig-left').addClass('animated fadeOutLeft');
-    fadeIn();
-    $('figure').click(function() {
 
+
+
+    fadeIn();
+    $('.figure').click(function(event) {
+      if ($(event.target).hasClass('correct')) {
+        score ++;
+        $('.jumbo').html(`<h1>${score}</h1>`)
+      }
       fadeOut();
       fadeIn();
     })
@@ -48,6 +55,10 @@ $(document).ready(function() {
 
   function fadeIn() {
     window.setTimeout(function() {
+      if ($('.jumbotron').hasClass('fadeOutUp')) {
+        $('.jumbotron').prop('class','jumbotron animated fadeInDown');
+        $('.jumbo').html(`<h1>${score}</h1>`)
+      }
       resetAnimation();
       setNames()
       $('.fig-left').addClass('animated fadeInLeft');
@@ -68,7 +79,7 @@ $(document).ready(function() {
         $('.fig-left').addClass('animated fadeOutLeft');
       }, 1500);
     }
-    $('figure').removeClass('correct');
+    $('.figure').removeClass('correct');
   }
 
   function resetAnimation() {
