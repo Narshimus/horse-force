@@ -133,6 +133,10 @@ $(document).ready(function() {
       $('.fig-left').css(`background-image`, `url(img/horse_left.png`);
       $('.fig-right').css(`background-image`, `url('img/horse_right.png`);
     }
+    if(score === 69){
+      $('.fig-left').css(`background-image`, `url(img/kim.jpg`);
+      $('.fig-right').css(`background-image`, `url('img/putin2.jpg`);
+    }
   }
 
   function getRand() {
