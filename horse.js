@@ -1,8 +1,9 @@
 $(document).ready(function() {
 
-  //get name arrays
-  let trueNames, falseNames, correct;
+//initialize variables populate lists
+  let trueNames, falseNames, correct, pictures, data1, data2, data3;
   let score = 0;
+  let pictureMode = false;
   $.getJSON('truenames.json', function(data) {
     trueNames = data;
   })
@@ -10,16 +11,12 @@ $(document).ready(function() {
     falseNames = data;
   })
 
-  // $.getJSON("https://api.flickr.com/services/feeds/groups_pool.gne?jsoncallback=?", {
-  //     id: '289685@N25',
-  //     format: "json",
-  //   },
-  //   function(data) {
-  //     var rnd = Math.floor(Math.random() * data.items.length);
-  //     var image_src = data.items[rnd]['media']['m'].replace("_m", "_b");
-  //     $('body').css('background-image', "url('" + image_src + "')");
-  //
-  //   });
+//create events
+  $('.footer-text').click(function() {
+    getGraphics();
+    pictureMode = !pictureMode;
+    pictureMode ? $('.footer-text').text('disable API mode') : $('.footer-text').text('enable API mode')
+  })
 
   $('#start').click(function() {
 
@@ -27,19 +24,21 @@ $(document).ready(function() {
     $('.fig-right').addClass('animated fadeOutRight');
     $('.fig-left').addClass('animated fadeOutLeft');
 
-
-
     fadeIn();
     $('.figure').click(function(event) {
       if ($(event.target).hasClass('correct')) {
-        score ++;
+        score++;
         $('.jumbo').html(`<h1>${score}</h1>`)
+        $('.jumbo').css('color', 'green')
+      } else {
+        $('.jumbo').css('color', 'red')
       }
       fadeOut();
       fadeIn();
     })
   })
 
+//picks names from lists and appends to page
   function setNames() {
     let arr = ['name-left', 'name-right'];
     correct = arr.splice(Math.round(Math.random()), 1)
@@ -53,10 +52,12 @@ $(document).ready(function() {
     }
   }
 
+//animations and timers for fading in horses and scoreboard
   function fadeIn() {
     window.setTimeout(function() {
+      setGraphics();
       if ($('.jumbotron').hasClass('fadeOutUp')) {
-        $('.jumbotron').prop('class','jumbotron animated fadeInDown');
+        $('.jumbotron').prop('class', 'jumbotron animated fadeInDown');
         $('.jumbo').html(`<h1>${score}</h1>`)
       }
       resetAnimation();
@@ -66,6 +67,8 @@ $(document).ready(function() {
     }, 2500);
   }
 
+//animations and timers for fading out horses
+//boolean to determine winner
   function fadeOut() {
     resetAnimation();
     if ($('.fig-right').hasClass('correct')) {
@@ -82,13 +85,58 @@ $(document).ready(function() {
     $('.figure').removeClass('correct');
   }
 
+//resets animation classes
+//TODO phase out using .prop on other functions
   function resetAnimation() {
     $('.fig-left').removeClass('animated fadeOutLeft');
     $('.fig-right').removeClass('animated fadeOutRight');
     $('.fig-left').removeClass('animated fadeInLeft');
     $('.fig-right').removeClass('animated fadeInRight');
-    // $('.fig-left').removeClass('correct');
-    // $('.fig-right').removeClass('correct');
+  }
+
+//get requests for api mode
+  function getGraphics() {
+    var first = $.getJSON("https://api.flickr.com/services/feeds/groups_pool.gne?jsoncallback=?", {
+        id: '289685@N25',
+        format: "json",
+      },
+      function(data) {
+        data1 = data['items'];
+      });
+    var second = $.getJSON("https://api.flickr.com/services/feeds/groups_pool.gne?jsoncallback=?", {
+        id: '75029738@N00',
+        format: "json",
+      },
+      function(data) {
+        data2 = data['items'];
+      });
+    var third = $.getJSON("https://api.flickr.com/services/feeds/groups_pool.gne?jsoncallback=?", {
+        id: '44159230@N00',
+        format: "json",
+      },
+      function(data) {
+        data3 = data['items'];
+      });
+
+    $.when(first, second, third).done(function() {
+      pictures = data1.concat(data2, data3);
+    })
+  }
+
+//get random graphics if api mode is on or reset
+//TODO user can still get the same image twice (splice?)
+  function setGraphics() {
+    if (pictureMode) {
+      $('.fig-left').css(`background-image`, `url('${pictures[getRand()]['media']['m'].replace("_m", "_b")}')`);
+      $('.fig-right').css(`background-image`, `url('${pictures[getRand()]['media']['m'].replace("_m", "_b")}')`);
+    } else {
+      $('.fig-left').css(`background-image`, `url(img/horse_left.png`);
+      $('.fig-right').css(`background-image`, `url('img/horse_right.png`);
+    }
+  }
+
+  function getRand() {
+    return Math.floor(Math.random() * pictures.length);
   }
 
 })

@@ -1,5 +1,5 @@
 body {
-  padding-top: 50px;
+  /*padding-top: 50px;*/
   padding-bottom: 60px;
   max-width: 100%;
 }
@@ -57,3 +57,11 @@ div p, h1{
   height: 50px;
   width: 50px;
 }
+
+.footer-text{
+  text-align: left;
+}
+
+.name{
+  color: black;
+  text-shadow: 2px 2px 4px #ffffff;}
